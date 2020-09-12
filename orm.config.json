@@ -1,0 +1,14 @@
+{
+  "type": "mysql",
+  "host": "174.138.108.5",
+  "port": 3306,
+  "username": "root",
+  "password": "dockermysql",
+  "database": "bddocker",
+  "entities": ["src/**/**/*.entity{.ts,.js}"],
+  "migrations": ["src/database/migrations/*{.ts,.js}"],
+  "synchronize": false,
+  "cli": {
+    "migrationsDir": "src/database/migrations"
+  }
+}
