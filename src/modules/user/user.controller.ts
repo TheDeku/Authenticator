@@ -22,33 +22,37 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Get(':id')
-  @Roles(RoleType.ADMINISTRATOR)
+  @Roles(RoleType.ADMIN)
   @UseGuards(new AuthGuard(), RoleGuard)
   getUser(@Param('id', ParseIntPipe) id: number): Promise<ReadUserDto> {
     return this._userService.get(id);
   }
 
-  @Roles(RoleType.ADMINISTRATOR, RoleType.CAJERO)
+  @Roles(RoleType.ADMIN)
   @UseGuards(new AuthGuard(), RoleGuard)
   @Get()
   getUsers(): Promise<ReadUserDto[]> {
     return this._userService.getAll();
   }
 
-  @Patch(':id')
-  updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() user: Partial<ReadUserDto>,
-  ) {
-    return this._userService.update(id, user);
+  @Patch('update')
+  @Roles(RoleType.USUARIO)
+  @UseGuards(new AuthGuard(), RoleGuard)
+  updateUser(@Body() user: Partial<ReadUserDto>,) {
+    console.log(user);
+    return this._userService.update(user.id,user);
   }
 
   @Delete(':id')
+  @Roles(RoleType.USUARIO)
+  @UseGuards(new AuthGuard(), RoleGuard)
   deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this._userService.delete(id);
   }
 
   @Post('setRole/:userId/:roleId')
+  @Roles(RoleType.ADMIN)
+  @UseGuards(new AuthGuard(), RoleGuard)
   setRoleToUser(
     @Param('userId', ParseIntPipe) userId: number,
     @Param('roleId', ParseIntPipe) roleId: number,

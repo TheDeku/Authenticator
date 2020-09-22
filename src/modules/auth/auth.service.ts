@@ -20,9 +20,9 @@ export class AuthService {
     @InjectRepository(AuthRepository)
     private readonly _authRepository: AuthRepository,
     private readonly _jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async signup(signupDto: SignupDto): Promise<void> {
+  async signup(signupDto: SignupDto): Promise<any> {
     const { username, email } = signupDto;
     const userExists = await this._authRepository.findOne({
       where: [{ username }, { email }],
@@ -35,7 +35,25 @@ export class AuthService {
     return this._authRepository.signup(signupDto);
   }
 
-  async signin(signinDto: SigninDto): Promise<{ token: string}> {
+
+
+  async activate(signupDto: SignupDto): Promise<any> {
+    const { username, email } = signupDto;
+    const userExists = await this._authRepository.findOne({
+      where: [{ username }, { email }],
+    });
+
+    if (userExists) {
+      throw new ConflictException('username or email already exists');
+    }
+
+    return this._authRepository.signup(signupDto);
+  }
+
+
+
+
+  async signin(signinDto: SigninDto): Promise<{ token: string }> {
     const { username, password } = signinDto;
     const user: User = await this._authRepository.findOne({
       where: { username },
@@ -49,11 +67,11 @@ export class AuthService {
 
     const isMatch = await compare(password, user.password);
     //const passwordMd5 =  md5( password );
-      if (!isMatch) {
-        throw new UnauthorizedException('invalid credentials');
+    if (!isMatch) {
+      throw new UnauthorizedException('invalid credentials');
     }
 
- 
+
 
     const payload: IJwtPayLoad = {
       id: user.id,
@@ -64,11 +82,11 @@ export class AuthService {
 
     const token = await this._jwtService.sign(payload);
     const data = {
-      token:token,
-      message:'OK',
-      status:true
+      token: token,
+      message: 'OK',
+      status: true
     }
-     return  data ;
+    return data;
     // return { token };
   }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "practica",
+    "name": "Authenticator-Resto-app",
     "version": "0.0.1",
     "description": "",
     "author": "",
@@ -30,7 +30,6 @@
         "@nestjs/jwt": "^7.1.0",
         "@nestjs/passport": "^7.1.0",
         "@nestjs/platform-express": "^7.4.4",
-        "@nestjs/typeorm": "github:nestjs/typeorm",
         "bcryptjs": "^2.4.3",
         "class-transformer": "^0.3.1",
         "class-validator": "^0.12.2",
@@ -44,8 +43,9 @@
         "reflect-metadata": "^0.1.13",
         "rimraf": "^3.0.2",
         "rxjs": "^6.6.3",
+        "save": "github:nestjs/typeorm",
         "ts-mapper": "^1.2.4",
-        "typeorm": "^0.2.26"
+        "typeorm": "^0.2.25"
     },
     "devDependencies": {
         "@nestjs/cli": "^7.0.0",

@@ -11,11 +11,11 @@ import { global } from '../../shared/global'
 export class AuthGuard implements CanActivate {
 
 
-    
+
   async canActivate(context: ExecutionContext,): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     if (!request.headers.authorization) {
-        return false;
+      return false;
     }
 
     request.user = await this.validateToken(request.headers.authorization);
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     const key = await global.JWT_SECRET;
     try {
       const decoded: any = await jwt.verify(token, key);
-
+      console.log(decoded);
       return decoded;
     } catch (err) {
       const message = 'Token error: ' + (err.message || err.name);
