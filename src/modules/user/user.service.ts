@@ -1,7 +1,7 @@
 import {
   Injectable,
   BadRequestException,
-  NotFoundException,
+  NotFoundException, ConflictException
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,9 +10,12 @@ import { RoleRepository } from '../role/role.repository';
 import { status } from '../../shared/entity-status.enum';
 import { ReadUserDto, UpdateUserDto } from './dto';
 import { plainToClass } from 'class-transformer';
+import { genSalt, hash } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
+
+ 
   constructor(
     @InjectRepository(UserRepository)
     private readonly _userRepository: UserRepository,
@@ -82,5 +85,58 @@ export class UserService {
     await this._userRepository.save(userExist);
 
     return true;
+  }
+
+
+  async forget(email: string): Promise<any> {
+   
+    const user = await this._userRepository.findOne(email,{
+      where: { email: email },
+    });
+ 
+
+    if (!user) {
+      throw new ConflictException('Email entered does not exist');
+    }else{
+      let pin = Math.floor(Math.random() * (9999 - 1234 + 1) + 1234)
+
+      user.restore = pin;
+
+      return await (await this._userRepository.save(user)).restore;
+    }
+
+
+  }
+
+  async validatePin(restore: number, email: string) {
+    console.log(restore);
+    const user = await this._userRepository.findOne(restore,{
+      where: { restore: restore, email: email },
+    });
+  
+
+    if (!user) {
+      throw new ConflictException('Pin invalid');
+    }else{
+      user.restore = null;
+
+      return await this._userRepository.save(user);
+    }
+  }
+
+
+  newPassword = async (data) => {
+   console.log(data);
+    const user = await this._userRepository.findOne({
+      where: { email: data.email}
+    });
+
+    if (!user) {
+      throw new ConflictException('No se pudo restablecer la contraseña');
+    }else{
+      const salt = await genSalt(10);
+      user.password = await hash(data.password, salt);
+      return await this._userRepository.save(user);
+    }
   }
 }

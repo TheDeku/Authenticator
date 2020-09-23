@@ -10,17 +10,19 @@ import { SigninDto, SignupDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly _authService: AuthService) {}
+  constructor(private readonly _authService: AuthService) { }
 
   @Post('/signup')
   @UsePipes(ValidationPipe)
-  async signup(@Body() SignupDto: SignupDto): Promise<void> {
-    return this._authService.signup(SignupDto);
+  async signup(@Body() signupDto: SignupDto): Promise<void> {
+    return this._authService.signup(signupDto);
   }
 
   @Post('/signin')
   @UsePipes(ValidationPipe)
-  async signin(@Body() SigninDto: SigninDto) {
-    return this._authService.signin(SigninDto);
+  async signin(@Body() signinDto: SigninDto) {
+    return this._authService.signin(signinDto);
   }
+
+
 }

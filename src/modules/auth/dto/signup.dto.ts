@@ -1,7 +1,7 @@
 import { from } from "rxjs";
-import { IsNotEmpty, IsString} from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
-export class SignupDto{
+export class SignupDto {
     @IsNotEmpty()
     @IsString()
     username: string;
@@ -13,4 +13,8 @@ export class SignupDto{
     @IsNotEmpty()
     @IsString()
     password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    role: string;
 }

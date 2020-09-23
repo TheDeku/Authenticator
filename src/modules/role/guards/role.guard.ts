@@ -4,7 +4,7 @@ import { Reflector } from '@nestjs/core';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
-  constructor(private readonly _reflector: Reflector) {}
+  constructor(private readonly _reflector: Reflector) { }
 
   canActivate(context: ExecutionContext): boolean {
     const roles: string[] = this._reflector.get<string[]>(
@@ -19,8 +19,16 @@ export class RoleGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
-    const hasRole = () => roles.includes(user.roles);
+    let hasRole;
 
+    for (let index = 0; index < user.roles.length; index++) {
+      const element = user.roles[index];
+      hasRole = () => roles.includes(element);
+      console.log(hasRole());
+      if (hasRole()) {
+        return user && user.roles && hasRole();
+      }
+    }
 
     return user && user.roles && hasRole();
   }

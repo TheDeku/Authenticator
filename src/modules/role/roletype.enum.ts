@@ -1,6 +1,9 @@
 export enum RoleType {
-    ADMINISTRATOR = 'ADMINISTRATOR',
-    COMENSAL = 'COMENSAL',
+    ADMIN = 'ADMIN',
+    USUARIO = 'USUARIO',
     GARZON = 'GARZON',
-    CAJERO = 'CAJERO'
+    CAJERO = 'CAJERO',
+    BODEGA = 'BODEGA',
+    COCINA = 'COCINA',
+    CLIENTE = 'CLIENTE'
 }
