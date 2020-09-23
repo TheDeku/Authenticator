@@ -35,24 +35,6 @@ export class AuthService {
     return this._authRepository.signup(signupDto);
   }
 
-
-
-  async activate(signupDto: SignupDto): Promise<any> {
-    const { username, email } = signupDto;
-    const userExists = await this._authRepository.findOne({
-      where: [{ username }, { email }],
-    });
-
-    if (userExists) {
-      throw new ConflictException('username or email already exists');
-    }
-
-    return this._authRepository.signup(signupDto);
-  }
-
-
-
-
   async signin(signinDto: SigninDto): Promise<{ token: string }> {
     const { username, password } = signinDto;
     const user: User = await this._authRepository.findOne({

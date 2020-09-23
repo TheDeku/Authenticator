@@ -109,4 +109,8 @@ export class AuthRepository extends Repository<User> {
     }
 
   }
+
+  async restorePassword(pin:number){
+    
+  }
 }

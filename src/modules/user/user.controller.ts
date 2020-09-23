@@ -7,7 +7,7 @@ import {
   Patch,
   Delete,
   ParseIntPipe,
-  UseGuards,
+  UseGuards, UsePipes, ValidationPipe
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
@@ -58,5 +58,47 @@ export class UserController {
     @Param('roleId', ParseIntPipe) roleId: number,
   ): Promise<boolean> {
     return this._userService.setRoleToUser(userId, roleId);
+  }
+
+
+  @Post('/forget')
+  @UsePipes(ValidationPipe)
+  async restore(@Body() email: string) {
+    let response;
+    await this._userService.forget(email).then(data =>{
+      response = {message:'Se ha enviado un codigo de validación a su correo',status:true};
+    }).catch(err =>{
+      err = {message: err.message,status:false,code:err.status};
+      response = err;
+    })
+    return  response;
+  }
+
+  @Post('/validate')
+  @UsePipes(ValidationPipe)
+  async validatePin(@Body() restore: number,email:string) {
+    let response;
+    await this._userService.validatePin(restore,email).then(data =>{
+      response = { message:'Continue para cambiar su contraseña',status:true};
+    }).catch(err =>{
+      err = {message: err.message, status:false, code:err.status};
+      response = err;
+    })
+    return  response;
+  }
+
+
+  @Post('/newpass')
+  @UsePipes(ValidationPipe)
+  async newPassword(@Body() data) {
+    let response;
+
+    await this._userService.newPassword(data).then(data =>{
+      response = { message:'Se cambio la contraseña correctamente',status:true};
+    }).catch(err =>{
+      err = {message: err.message, status:false, code:err.status};
+      response = err;
+    })
+    return  response;
   }
 }

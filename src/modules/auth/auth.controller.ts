@@ -24,9 +24,5 @@ export class AuthController {
     return this._authService.signin(signinDto);
   }
 
-  @Post('/activate')
-  @UsePipes(ValidationPipe)
-  async activate(@Body() signinDto: SigninDto) {
-    return this._authService.signin(signinDto);
-  }
+
 }
