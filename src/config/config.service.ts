@@ -20,6 +20,15 @@ export class ConfigService {
       } else {
         this.envConfig = {
           PORT: process.env.PORT,
+          HOST: process.env.HOST,
+          TYPE: process.env.TYPE,
+          PORTBD: process.env.PORTBD,
+          USERNAME: process.env.USERNAME,
+          PASSWORD: process.env.PASSWORD,
+          DATABASE: process.env.DATABASE,
+          JWT_SECRET: process.env.JWT_SECRET,
+          SYNCHRONIZE: process.env.SYNCHRONIZE,
+          DROPSCHEMA: process.env.DROPSCHEMA,
         };
       }
     }
@@ -28,3 +37,10 @@ export class ConfigService {
       return this.envConfig[key];
     }
   }
+
+/*   PORT: '5004',
+  HOST: '174.138.108.5',
+  USERNAME: 'root',
+  PASSWORD: 'dockermysql',
+  DATABASE: 'bddocker',
+  JWT_SECRET: 'oirgdjnc$@dfg', */

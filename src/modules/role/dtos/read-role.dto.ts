@@ -9,9 +9,9 @@ export class ReadRoleDto {
 
     @Expose()
     @IsString()
-    readonly name: string;
+    readonly nombre: string;
 
     @Expose()
     @IsString()
-    readonly description: string;
+    readonly descricion: string;
 }
