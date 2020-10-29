@@ -45,7 +45,8 @@
         "rxjs": "^6.6.3",
         "save": "github:nestjs/typeorm",
         "ts-mapper": "^1.2.4",
-        "typeorm": "^0.2.25"
+        "typeorm": "^0.2.25",
+        "@nestjs/typeorm": "^7.1.1"
     },
     "devDependencies": {
         "@nestjs/cli": "^7.0.0",
