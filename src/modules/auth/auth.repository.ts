@@ -1,71 +1,71 @@
 import { genSalt, hash } from "bcryptjs";
 import { from } from "rxjs";
 import { EntityRepository, getConnection, Repository } from "typeorm";
-import { User } from "../user/user.entity";
 import { SignupDto } from "./dto";
 import md5 from 'md5-hash';
 import { RoleRepository } from "../role/role.repository";
-import { Role } from "../role/role.entity";
 import { RoleType } from "../role/roletype.enum";
+import { Usuario } from '../user/Usuario.entity';
+import { Rol } from "../role/Rol.entity";
 
-@EntityRepository(User)
-export class AuthRepository extends Repository<User> {
+@EntityRepository(Usuario)
+export class AuthRepository extends Repository<Usuario> {
   async signup(signupDto: SignupDto) {
     const { username, email, password } = signupDto;
-    const user = new User();
+    const user = new Usuario();
     user.username = username;
     user.email = email;
 
     const roleRepository: RoleRepository = await getConnection().getRepository(
-      Role,
+      Rol,
     );
 
-    let defaultRole: Role = await roleRepository.findOne({
-      where: { name: RoleType.USUARIO },
+    let defaultRole: Rol = await roleRepository.findOne({
+      where: { nombre: RoleType.USUARIO },
     });
 
     if (!defaultRole) {
-      const role = new Role();
-      role.name = RoleType.USUARIO;
-      role.description = "Usuario por defecto - sin validacion";
+      const role = new Rol();
+      role.nombre = RoleType.USUARIO;
+      role.descripcion = "Usuario por defecto";
       let createRole = await roleRepository.create(role);
       await createRole.save();
       console.log(createRole);
     }
-    let secondaryRole: Role = await roleRepository.findOne({
-      where: { name: signupDto.role },
+    let secondaryRole: Rol = await roleRepository.findOne({
+      where: { nombre: signupDto.rol },
     });
     if (!secondaryRole) {
-      const role = new Role();
+      const role = new Rol();
 
-      switch (signupDto.role) {
+      switch (signupDto.rol) {
         case RoleType.ADMIN:
-          role.name = RoleType.ADMIN;
-          role.description = "Administrador del sistema";
+          role.nombre = RoleType.ADMIN;
+          role.descripcion = "Administrador del sistema";
           break;
         case RoleType.BODEGA:
-          role.name = RoleType.BODEGA;
-          role.description = "Usuario bodega";
+          role.nombre = RoleType.BODEGA;
+          role.descripcion = "Usuario bodega";
           break;
         case RoleType.CAJERO:
-          role.name = RoleType.CAJERO;
-          role.description = "Usuario caja";
+          role.nombre = RoleType.CAJERO;
+          role.descripcion = "Usuario caja";
           break;
         case RoleType.CLIENTE:
-          role.name = RoleType.CLIENTE;
-          role.description = "Cliente aplicación";
+          role.nombre = RoleType.CLIENTE;
+          role.descripcion = "Cliente aplicación";
           break;
         case RoleType.COCINA:
-          role.name = RoleType.COCINA;
-          role.description = "Usuario cocina";
+          role.nombre = RoleType.COCINA;
+          role.descripcion = "Usuario cocina";
           break;
         case RoleType.GARZON:
-          role.name = RoleType.GARZON;
-          role.description = "Usuario Garzon";
+          role.nombre = RoleType.GARZON;
+          role.descripcion = "Usuario Garzon";
           break;
         case RoleType.USUARIO:
-          role.name = RoleType.USUARIO;
-          role.description = "Usuario por defecto - sin validacion";
+          role.nombre = RoleType.USUARIO;
+          role.descripcion = "Usuario por defecto";
           break;
 
         default:
@@ -81,9 +81,9 @@ export class AuthRepository extends Repository<User> {
       await createRole.save();
       console.log(createRole);
     }
-    if (signupDto.role) {
+    if (signupDto.rol) {
       secondaryRole = await roleRepository.findOne({
-        where: { name: signupDto.role },
+        where: { nombre: signupDto.rol },
       });
     }
 
@@ -91,7 +91,6 @@ export class AuthRepository extends Repository<User> {
 
     const salt = await genSalt(10);
     user.password = await hash(password, salt);
-    
 
     try {
       await user.save();
@@ -101,6 +100,7 @@ export class AuthRepository extends Repository<User> {
       }
       return data;
     } catch (error) {
+      console.log(error)
       const data = {
         message: "May the force be with you, but this account doesn't ;v",
         status: true

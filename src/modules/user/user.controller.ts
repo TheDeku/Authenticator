@@ -10,7 +10,6 @@ import {
   UseGuards, UsePipes, ValidationPipe
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './user.entity';
 import { Roles } from '../role/decorators/role.decorators';
 import { RoleGuard } from '../role/guards/role.guard';
 import { RoleType } from '../../modules/role/roletype.enum';
@@ -88,7 +87,7 @@ export class UserController {
   }
 
 
-  @Post('/newpass')
+  @Post('/restore')
   @UsePipes(ValidationPipe)
   async newPassword(@Body() data) {
     let response;

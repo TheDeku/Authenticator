@@ -18,5 +18,5 @@ export class ReadUserDto {
 
     @Expose()
     @Type(type => ReadRoleDto)
-    readonly roles: ReadRoleDto[];
+    readonly rols: ReadRoleDto[];
 }

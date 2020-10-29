@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { RoleRepository } from './role.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Role } from './role.entity';
 import { ReadRoleDto, CreateRoleDto, UpdateRoleDto } from './dtos';
 import { plainToClass } from 'class-transformer';
+import { Rol } from './Rol.entity';
 
 @Injectable()
 export class RoleService {
@@ -21,7 +21,7 @@ export class RoleService {
             throw new BadRequestException('id must be sent');
         }
 
-        const role: Role = await this._roleRepository.findOne(id, {
+        const role: Rol = await this._roleRepository.findOne(id, {
             where: { status: 'ACTIVE' },
         });
 
@@ -33,7 +33,7 @@ export class RoleService {
     }
 
     async getAll(): Promise<ReadRoleDto[]> {
-        const roles: Role[] = await this._roleRepository.find({
+        const roles: Rol[] = await this._roleRepository.find({
             where: { status: 'ACTIVE' },
         });
 
@@ -41,7 +41,7 @@ export class RoleService {
     }
 
     async create(role: Partial<CreateRoleDto>): Promise<ReadRoleDto> {
-        const savedRole: Role = await this._roleRepository.save(role);
+        const savedRole: Rol = await this._roleRepository.save(role);
         return plainToClass(ReadRoleDto, savedRole);
     }
 
