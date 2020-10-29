@@ -8,6 +8,8 @@ RUN npm install --quiet && npm cache clean --force
 
 COPY . .
 
+CMD ["npm", "install"]
+
 CMD ["npm", "run", "start:debug"]
 
 
