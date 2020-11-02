@@ -30,9 +30,11 @@
         "@nestjs/jwt": "^7.1.0",
         "@nestjs/passport": "^7.1.0",
         "@nestjs/platform-express": "^7.4.4",
+        "@nestjs/typeorm": "^7.1.1",
         "bcryptjs": "^2.4.3",
         "class-transformer": "^0.3.1",
         "class-validator": "^0.12.2",
+        "eureka-js-client": "^4.5.0",
         "jsonwebtoken": "^8.5.1",
         "md5": "^2.3.0",
         "md5-hash": "^1.0.1",
@@ -45,8 +47,7 @@
         "rxjs": "^6.6.3",
         "save": "github:nestjs/typeorm",
         "ts-mapper": "^1.2.4",
-        "typeorm": "^0.2.25",
-        "@nestjs/typeorm": "^7.1.1"
+        "typeorm": "^0.2.25"
     },
     "devDependencies": {
         "@nestjs/cli": "^7.0.0",
