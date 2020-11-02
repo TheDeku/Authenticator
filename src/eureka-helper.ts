@@ -30,8 +30,6 @@ export var registerWithEureka = function (appName, PORT:number) {
         },
     })
 
-    console.log(client);
-
     client.start(error => {
         console.log(error || "user service registered")
     });

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -29,7 +29,7 @@ import { global } from '../../shared/global'
           }
         }
       }
-    }),
+    }),HttpModule
   ],
 
   controllers: [AuthController],

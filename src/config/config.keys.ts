@@ -8,5 +8,13 @@ export enum Configuration {
   DATABASE = 'DATABASE',
   JWT_SECRET = 'JWT_SECRET',
   SYNCHRONIZE = 'SYNCHRONIZE',
-  DROPSCHEMA =' DROPSCHEMA',
+  DROPSCHEMA = ' DROPSCHEMA',
 }
+
+
+export const environment = {
+  appVersion: require('../../package.json').version,
+  appDescription: require('../../package.json').description,
+  appAuthor: require('../../package.json').author,
+
+};

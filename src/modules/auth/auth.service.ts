@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpService,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -20,6 +21,7 @@ export class AuthService {
     @InjectRepository(AuthRepository)
     private readonly _authRepository: AuthRepository,
     private readonly _jwtService: JwtService,
+    private _http:HttpService
   ) { }
 
   async signup(signupDto: SignupDto): Promise<any> {
