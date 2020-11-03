@@ -2,7 +2,6 @@ import { genSalt, hash } from "bcryptjs";
 import { from } from "rxjs";
 import { EntityRepository, getConnection, Repository } from "typeorm";
 import { SignupDto } from "./dto";
-import md5 from 'md5-hash';
 import { RoleRepository } from "../role/role.repository";
 import { RoleType } from "../role/roletype.enum";
 import { Usuario } from '../user/Usuario.entity';
@@ -10,7 +9,9 @@ import { Rol } from "../role/Rol.entity";
 
 @EntityRepository(Usuario)
 export class AuthRepository extends Repository<Usuario> {
-  async signup(signupDto: SignupDto) {
+
+
+  async signup(signupDto: SignupDto)  {
     const { username, email, password } = signupDto;
     const user = new Usuario();
     user.username = username;
@@ -71,7 +72,9 @@ export class AuthRepository extends Repository<Usuario> {
         default:
           const data = {
             message: 'Role doest noe exist',
-            status: true
+            status: true,
+            value:user,
+            userCreated:false
           }
           return data;
 
@@ -94,23 +97,29 @@ export class AuthRepository extends Repository<Usuario> {
 
     try {
       await user.save();
-      const data = {
+      let data = {
         message: 'User created succefully',
-        status: true
+        status: true,
+        value:user,
+        userCreated:true
       }
+    
       return data;
     } catch (error) {
       console.log(error)
       const data = {
         message: "May the force be with you, but this account doesn't ;v",
-        status: true
+        status: true,
+        value:user,
+        userCreated:false
       }
+
+
+
       return data;
     }
 
   }
 
-  async restorePassword(pin:number){
-    
-  }
+
 }

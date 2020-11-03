@@ -1,11 +1,14 @@
 import * as fs from 'fs';
 import { parse } from 'dotenv';
+import * as dotenv from 'dotenv';
 
 export class ConfigService {
     private readonly envConfig: { [key: string]: string };
   
     constructor() {
+      dotenv.config();
       const isDevelopmentEnv = process.env.NODE_ENV !== 'production';
+      console.log(`Application listening on port: ${process.env.NODE_ENV}`)
       if (isDevelopmentEnv) {
         const envFilePath = __dirname + '/../../.env';
         const existsPath = fs.existsSync(envFilePath);

@@ -1,7 +1,7 @@
 import {
   Injectable,
   BadRequestException,
-  NotFoundException, ConflictException
+  NotFoundException, ConflictException, HttpService
 } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -21,6 +21,7 @@ export class UserService {
     private readonly _userRepository: UserRepository,
     @InjectRepository(RoleRepository)
     private readonly _roleRepository: RoleRepository,
+    private _http:HttpService
   ) { }
 
   async get(id: number): Promise<ReadUserDto> {
@@ -101,7 +102,24 @@ export class UserService {
       let pin = Math.floor(Math.random() * (9999 - 1234 + 1) + 1234)
 
       user.restore = pin;
+      let stringPin = String(pin).split("").join(" ");
+      console.log(stringPin);
+        let emailJson={
+          title: "Restablecimiento de contraseña",
+          usernameOrName: user.username,
+          description: stringPin,
+          content: stringPin,
+          type: "GENERAL",
+          emailToSend: user.email,
+          urlImageHeaderMail:"https://images.vexels.com/media/users/3/153503/isolated/preview/82d5effb4641c42771a17d0550ffc60b-icono-de-la-insignia-de-acceso-by-vexels.png",
+          urlImageBodyMail:"https://images.vexels.com/media/users/3/153503/isolated/preview/82d5effb4641c42771a17d0550ffc60b-icono-de-la-insignia-de-acceso-by-vexels.png",
+          containButton:false
+      }
 
+      
+        console.log(JSON.stringify(emailJson));
+        console.log(process.env.MAIL_ENDPOINT);
+        await this._http.post(`${process.env.MAIL_ENDPOINT}`,emailJson).toPromise().then(resp=>{}).catch(err=>{});
       return await (await this._userRepository.save(user)).restore;
     }
 
