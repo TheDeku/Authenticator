@@ -117,7 +117,7 @@ export class UserService {
       }
 
       
-        console.log(JSON.stringify(emailJson));
+        //console.log(JSON.stringify(emailJson));
         console.log(process.env.MAIL_ENDPOINT);
         await this._http.post(`${process.env.MAIL_ENDPOINT}`,emailJson).toPromise().then(resp=>{}).catch(err=>{});
       return await (await this._userRepository.save(user)).restore;
@@ -127,7 +127,7 @@ export class UserService {
   }
 
   async validatePin(restore: number, email: string) {
-    console.log(restore);
+    //console.log(restore);
     const user = await this._userRepository.findOne(restore,{
       where: { restore: restore, email: email },
     });

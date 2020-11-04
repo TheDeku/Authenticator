@@ -40,7 +40,7 @@ export class AuthService {
       }
   
       let response = await this._authRepository.signup(signupDto);
-      console.log(response);
+      //console.log(response);
       if (response.userCreated) {
         let emailJson={
           title: "Bienvenido querido",

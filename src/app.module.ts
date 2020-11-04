@@ -2,18 +2,19 @@ import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Configuration } from './config/config.keys';
-import { ConfigModule } from './config/config.module';
+
 import { ConfigService } from './config/config.service';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RoleService } from './modules/role/role.service';
 import { RoleModule } from './modules/role/role.module';
+import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 
 @Global()
 @Module({
-  imports: [ConfigModule, DatabaseModule, UserModule, AuthModule, RoleModule],
+  imports: [ConfigModule.forRoot(), DatabaseModule, UserModule, AuthModule, RoleModule],
   controllers: [AppController],
   providers: [AppService],
 })

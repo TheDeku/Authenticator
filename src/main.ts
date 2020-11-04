@@ -14,7 +14,7 @@ async function bootstrap() {
 
   //  /api/endpointName
 
-  
+  console.log(process.env.MAIL_ENDPOINT);
 
   await app.listen(AppModule.port);
   // registerWithEureka("auth", parseInt(AppModule.port));
