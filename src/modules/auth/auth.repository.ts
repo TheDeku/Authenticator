@@ -43,30 +43,37 @@ export class AuthRepository extends Repository<Usuario> {
         case RoleType.ADMIN:
           role.nombre = RoleType.ADMIN;
           role.descripcion = "Administrador del sistema";
+          role.status = "WORKER";
           break;
         case RoleType.BODEGA:
           role.nombre = RoleType.BODEGA;
           role.descripcion = "Usuario bodega";
+          role.status = "WORKER";
           break;
         case RoleType.CAJERO:
           role.nombre = RoleType.CAJERO;
           role.descripcion = "Usuario caja";
+          role.status = "WORKER";
           break;
         case RoleType.CLIENTE:
           role.nombre = RoleType.CLIENTE;
           role.descripcion = "Cliente aplicación";
+          role.status = "STANDARD";
           break;
         case RoleType.COCINA:
           role.nombre = RoleType.COCINA;
           role.descripcion = "Usuario cocina";
+          role.status = "WORKER";
           break;
         case RoleType.GARZON:
           role.nombre = RoleType.GARZON;
           role.descripcion = "Usuario Garzon";
+          role.status = "WORKER";
           break;
         case RoleType.USUARIO:
           role.nombre = RoleType.USUARIO;
           role.descripcion = "Usuario por defecto";
+          role.status = "STANDARD";
           break;
 
         default:

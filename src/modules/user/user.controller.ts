@@ -29,9 +29,10 @@ export class UserController {
 
   @Roles(RoleType.ADMIN)
   @UseGuards(new AuthGuard(), RoleGuard)
-  @Get()
-  getUsers(): Promise<ReadUserDto[]> {
-    return this._userService.getAll();
+  @Post()
+  getUsers(@Body() query: any) {
+
+    return this._userService.getAll(query);
   }
 
   @Patch('update')

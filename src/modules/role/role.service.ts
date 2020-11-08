@@ -32,11 +32,11 @@ export class RoleService {
         return plainToClass(ReadRoleDto, role);
     }
 
-    async getAll(): Promise<ReadRoleDto[]> {
+    async getAll(type:string): Promise<ReadRoleDto[]> {
         const roles: Rol[] = await this._roleRepository.find({
-            where: { status: 'ACTIVE' },
+            where: { status: type },
         });
-
+        console.log(roles);
         return roles.map(role => plainToClass(ReadRoleDto, role));
     }
 

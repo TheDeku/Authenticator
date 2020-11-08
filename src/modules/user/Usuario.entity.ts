@@ -16,7 +16,7 @@ import { UsuDet } from "./UsuDet.entity";
 
 @Index("USUARIO__IDX", ["usuDetId"], { unique: true })
 @Entity("usuario", { schema: "portafolio" })
-export class Usuario extends BaseEntity{
+export class Usuario extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "ID" })
   id: number;
 
@@ -36,21 +36,22 @@ export class Usuario extends BaseEntity{
   usuDet: UsuDet;
 
   @ManyToMany(type => Rol, rol => rol.usuarios, { eager: true })
-  @JoinTable({ name: 'usu_rol' ,joinColumn: {
-          name: "USUARIO_ID",
-          referencedColumnName: "id"
-      },
-      inverseJoinColumn: {
-          name: "ROL_ID",
-          referencedColumnName: "id"
-      }})
+  @JoinTable({
+    name: 'usu_rol', joinColumn: {
+      name: "USUARIO_ID",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "ROL_ID",
+      referencedColumnName: "id"
+    }
+  })
   roles: Rol[];
 
-  @OneToOne(() => UsuDet, (usuDet) => usuDet.usuario, {
+  @OneToOne(() => UsuDet, usuDet => usuDet.usuario, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "USU_DET_ID", referencedColumnName: "id" }])
   usuDet2: UsuDet;
 
   @Column({ type: 'varchar', default: 'ACTIVE', length: 30 })

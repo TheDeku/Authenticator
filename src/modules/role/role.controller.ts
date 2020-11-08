@@ -16,14 +16,15 @@ import { CreateRoleDto } from './dtos/create-role.dto';
 export class RoleController {
     constructor(private readonly _roleService: RoleService) { }
 
-    @Get(':id')
+    @Get('rol/:id')
     getRole(@Param('id', ParseIntPipe) id: number): Promise<ReadRoleDto> {
         return this._roleService.get(id);
     }
 
-    @Get()
-    getRoles(): Promise<ReadRoleDto[]> {
-        return this._roleService.getAll();
+    @Get(':type')
+    getRoles(@Param('type',) type:string): Promise<ReadRoleDto[]> {
+        console.log(type);
+        return this._roleService.getAll(type);
     }
 
     @Post()
