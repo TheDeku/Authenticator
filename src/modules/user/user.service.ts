@@ -14,6 +14,9 @@ import { Usuario } from './Usuario.entity';
 import { UsuDet } from './UsuDet.entity';
 import { Rol } from '../role/Rol.entity';
 import { JoinColumn } from 'typeorm';
+import { UserDetailDto } from './dto/user-detail.dto';
+import { MessagesApi } from 'src/shared/messages.api';
+import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -90,6 +93,47 @@ export class UserService {
   async update(id: number, user: Partial<UpdateUserDto>): Promise<ReadUserDto> {
     const updatedsUser = await this._userRepository.update(id, user);
     return plainToClass(ReadUserDto, updatedsUser);
+  }
+
+  async updateDetail(userDetail:UserDetailDto){
+    let message;
+    try {
+      let result = plainToClass(UsuDet,userDetail)
+      let exist = await this._userDetRepository.findOne({where:{usuarioId:result.usuarioId}});
+
+      if (exist.usuarioId!=undefined) {
+        result.usuarioId = undefined;
+        result.id = exist.id;
+        await this._userDetRepository.save(result).then(async resp=>{
+          resp.usuarioId = exist.usuarioId;
+          message = new MessagesApi("Informacion Actualizada",true,HttpStatus.ACCEPTED,resp)
+          let result = await this._userRepository.findOne(resp.usuarioId);
+          console.log(result);
+          result.usuDetId=resp.id
+          await this._userRepository.save(result);
+        }).catch(err=>{
+          message = new MessagesApi("Información no puedo ser actualizada",true,HttpStatus.NOT_ACCEPTABLE,err)
+        });
+      }else{
+        await this._userDetRepository.save(result).then(async resp=>{
+          message = new MessagesApi("Informacion Actualizada",true,HttpStatus.ACCEPTED,resp)
+          let result = await this._userRepository.findOne(resp.usuarioId);
+          console.log(result);
+          result.usuDetId=resp.id
+          await this._userRepository.save(result);
+        }).catch(err=>{
+          message = new MessagesApi("Información no puedo ser actualizada",true,HttpStatus.NOT_ACCEPTABLE,err)
+        });
+      }
+ 
+ 
+    } catch (error) {
+      console.log(error);
+      message = new MessagesApi("Hubo un problema en la solicitud",true,HttpStatus.BAD_REQUEST,error)
+    }
+
+
+    return message;
   }
 
   async delete(id: number): Promise<void> {

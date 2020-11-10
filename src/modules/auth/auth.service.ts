@@ -53,7 +53,8 @@ export class AuthService {
   
         console.log(process.env.MAIL_ENDPOINT);
         await this._http.post(`${process.env.MAIL_ENDPOINT}`,emailJson).toPromise().then(resp=>{console.log(resp);}).catch(err=>{console.log(err);});
-        message = new MessagesApi(response.message,response.status,HttpStatus.CREATED,response.value.status);
+        response.value.password=undefined;
+        message = new MessagesApi(response.message,response.status,HttpStatus.CREATED,response.value);
       }else{
         message = new MessagesApi(response.message,false,HttpStatus.NOT_ACCEPTABLE,response.value);
       }
