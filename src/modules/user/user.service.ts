@@ -48,6 +48,22 @@ export class UserService {
     return plainToClass(ReadUserDto, user);
   }
 
+  async getByMail(mail: string): Promise<ReadUserDto> {
+    if (!mail) {
+      throw new BadRequestException('id must be sent');
+    }
+
+    const user: Usuario = await this._userRepository.findOne(mail, {
+      where: { status: status.ACTIVE },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return plainToClass(ReadUserDto, user);
+  }
+
   async getAll(query: any) {
     console.log(query);
     let role = await this._roleRepository.findOne({ where: { nombre: query.role } });
@@ -99,16 +115,17 @@ export class UserService {
     let message;
     try {
       let result = plainToClass(UsuDet,userDetail)
+
       let exist = await this._userDetRepository.findOne({where:{usuarioId:result.usuarioId}});
 
-      if (exist.usuarioId!=undefined) {
+      if (exist!=undefined) {
         result.usuarioId = undefined;
         result.id = exist.id;
+        
         await this._userDetRepository.save(result).then(async resp=>{
           resp.usuarioId = exist.usuarioId;
           message = new MessagesApi("Informacion Actualizada",true,HttpStatus.ACCEPTED,resp)
           let result = await this._userRepository.findOne(resp.usuarioId);
-          console.log(result);
           result.usuDetId=resp.id
           await this._userRepository.save(result);
         }).catch(err=>{

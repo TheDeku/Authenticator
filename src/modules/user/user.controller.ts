@@ -36,6 +36,14 @@ export class UserController {
     return this._userService.getAll(query);
   }
 
+  @Roles(RoleType.CAJERO,RoleType.ADMIN)
+  @UseGuards(new AuthGuard(), RoleGuard)
+  @Post("byMail")
+  getUsersByMail(@Body() email: string) {
+
+    return this._userService.getByMail(email);
+  }
+
   @Patch('update')
   @Roles(RoleType.USUARIO)
   @UseGuards(new AuthGuard(), RoleGuard)
@@ -65,7 +73,6 @@ export class UserController {
   @Post('updetail')
   @UsePipes(ValidationPipe)
   async updateUserDet(@Body() userDetail: UserDetailDto,@Res() response) {
-
     let status = await this._userService.updateDetail(userDetail);
     response.status(status.code).json(status);
   }

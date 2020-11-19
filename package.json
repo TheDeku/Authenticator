@@ -1,6 +1,6 @@
 {
     "name": "authenticator",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "authenticator for restaurant app",
     "author": "César Astorga",
     "private": true,
