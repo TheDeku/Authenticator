@@ -66,42 +66,69 @@ export class UserService {
 
   async getAll(query: any) {
     console.log(query);
-    let role = await this._roleRepository.findOne({ where: { nombre: query.role } });
-    const users = await this._userRepository.find({ where: { status: status.ACTIVE }});
+    let users;
+    let role
+    if (Object.keys(query).length === 0) {
+      users = await this._userRepository.find({ where: { status: status.ACTIVE }, relations: ['usuDet'] },);
+      let sendUsers = [];
+      await Promise.all(users.map(user => {
+        user.password = undefined;
+        if (user.usuDet === null) {
+          user.usuDet = new UsuDet();
+        }
+        for (let index = 0; index < user.roles.length; index++) {
+          const element = user.roles[index];
 
-    await Promise.all(users.map(async user => {
-      user.usuDet = await this._userDetRepository.findOne({
-        where: { id: user.usuDetId },
-      });
-      if (user.usuDet === undefined) {
-        user.usuDet = new UsuDet();
+          if (element.nombre === 'USUARIO') {
+            user.roles.splice(index, 1);
+          }
+        }
+        if (user.roles[0].nombre != "CLIENTE") {
+          sendUsers.push(user);
+        }
+
+      }))
+      return sendUsers;
+    } else {
+      role = await this._roleRepository.findOne({ where: { nombre: query.role } });
+      users = await this._userRepository.find({ where: { status: status.ACTIVE } });
+      await Promise.all(users.map(async user => {
+        user.usuDet = await this._userDetRepository.findOne({
+          where: { id: user.usuDetId },
+        });
+        if (user.usuDet === undefined) {
+          user.usuDet = new UsuDet();
+        }
+        user.password = undefined
+        await Promise.all(user.roles.map(rol => {
+          if (rol.nombre === 'USUARIO') {
+            rol = undefined;
+          } else {
+            user.roles = [];
+            user.roles.push(rol);
+          }
+        }))
+      }))
+
+      let userToResponse = [];
+      await Promise.all(users.map(async user => {
+        await Promise.all(user.roles.map(rol => {
+          if (rol.nombre === role.nombre) {
+            userToResponse.push(user);
+          }
+        }))
+      }));
+      if (query.size != 0) {
+        return this.paginate(userToResponse, query.size, query.number);
+      } else {
+        return userToResponse;
       }
-      user.password = undefined
-      await Promise.all(user.roles.map(rol => {
-        if (rol.nombre === 'USUARIO') {
-          rol = undefined;
-        } else {
-          user.roles = [];
-          user.roles.push(rol);
-        }
-      }))
-    }))
 
+    }
 
-    let userToResponse = [];
-    await Promise.all(users.map(async user => {
-      await Promise.all(user.roles.map(rol => {
-        if (rol.nombre === role.nombre) {
-          userToResponse.push(user);
-        }
-      }))
-    }));
-
-   
-    return this.paginate(userToResponse,query.size,query.number);
   }
 
-  paginate(array, page_size=5, page_number=1) {
+  paginate(array, page_size = 5, page_number = 1) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
     return array.slice((page_number - 1) * page_size, page_number * page_size);
   }
@@ -111,42 +138,42 @@ export class UserService {
     return plainToClass(ReadUserDto, updatedsUser);
   }
 
-  async updateDetail(userDetail:UserDetailDto){
+  async updateDetail(userDetail: UserDetailDto) {
     let message;
     try {
-      let result = plainToClass(UsuDet,userDetail)
+      let result = plainToClass(UsuDet, userDetail)
 
-      let exist = await this._userDetRepository.findOne({where:{usuarioId:result.usuarioId}});
+      let exist = await this._userDetRepository.findOne({ where: { usuarioId: result.usuarioId } });
 
-      if (exist!=undefined) {
+      if (exist != undefined) {
         result.usuarioId = undefined;
         result.id = exist.id;
-        
-        await this._userDetRepository.save(result).then(async resp=>{
+
+        await this._userDetRepository.save(result).then(async resp => {
           resp.usuarioId = exist.usuarioId;
-          message = new MessagesApi("Informacion Actualizada",true,HttpStatus.ACCEPTED,resp)
+          message = new MessagesApi("Informacion Actualizada", true, HttpStatus.ACCEPTED, resp)
           let result = await this._userRepository.findOne(resp.usuarioId);
-          result.usuDetId=resp.id
+          result.usuDetId = resp.id
           await this._userRepository.save(result);
-        }).catch(err=>{
-          message = new MessagesApi("Información no puedo ser actualizada",true,HttpStatus.NOT_ACCEPTABLE,err)
+        }).catch(err => {
+          message = new MessagesApi("Información no puedo ser actualizada", true, HttpStatus.NOT_ACCEPTABLE, err)
         });
-      }else{
-        await this._userDetRepository.save(result).then(async resp=>{
-          message = new MessagesApi("Informacion Actualizada",true,HttpStatus.ACCEPTED,resp)
+      } else {
+        await this._userDetRepository.save(result).then(async resp => {
+          message = new MessagesApi("Informacion Actualizada", true, HttpStatus.ACCEPTED, resp)
           let result = await this._userRepository.findOne(resp.usuarioId);
           console.log(result);
-          result.usuDetId=resp.id
+          result.usuDetId = resp.id
           await this._userRepository.save(result);
-        }).catch(err=>{
-          message = new MessagesApi("Información no puedo ser actualizada",true,HttpStatus.NOT_ACCEPTABLE,err)
+        }).catch(err => {
+          message = new MessagesApi("Información no puedo ser actualizada", true, HttpStatus.NOT_ACCEPTABLE, err)
         });
       }
- 
- 
+
+
     } catch (error) {
       console.log(error);
-      message = new MessagesApi("Hubo un problema en la solicitud",true,HttpStatus.BAD_REQUEST,error)
+      message = new MessagesApi("Hubo un problema en la solicitud", true, HttpStatus.BAD_REQUEST, error)
     }
 
 

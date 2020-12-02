@@ -11,6 +11,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '../../config/config.module';
 import { Configuration } from '../../config/config.keys';
 import { global } from '../../shared/global'
+import { GoogleStrategy } from './strategies/google-strategy';
+import * as config from 'config';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { global } from '../../shared/global'
       inject: [ConfigService],
       useFactory(){
         return{
-          secret: global.JWT_SECRET,
+          secret: process.env.JWT_SECRET,
           signOptions: {
             expiresIn: 3600,
           }
@@ -33,7 +35,7 @@ import { global } from '../../shared/global'
   ],
 
   controllers: [AuthController],
-  providers: [AuthService, ConfigService, JwtStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [AuthService, ConfigService, JwtStrategy,GoogleStrategy],
+  exports: [JwtStrategy, PassportModule,GoogleStrategy],
 })
 export class AuthModule {}

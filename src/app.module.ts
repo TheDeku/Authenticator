@@ -12,6 +12,7 @@ import { RoleModule } from './modules/role/role.module';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 
+
 @Global()
 @Module({
   imports: [ConfigModule.forRoot(), DatabaseModule, UserModule, AuthModule, RoleModule],

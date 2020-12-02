@@ -9,6 +9,7 @@ export enum Configuration {
   JWT_SECRET = 'JWT_SECRET',
   SYNCHRONIZE = 'SYNCHRONIZE',
   DROPSCHEMA = ' DROPSCHEMA',
+  LOGIN_GOOGLE = 'LOGIN_GOOGLE'
 }
 
 

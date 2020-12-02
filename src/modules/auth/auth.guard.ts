@@ -3,12 +3,11 @@ import { Observable } from 'rxjs';
 import * as jwt from 'jsonwebtoken';
 import { Configuration } from '../../config/config.keys';
 import { ConfigService } from '../../config/config.service';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AuthRepository } from './auth.repository';
 import { global } from '../../shared/global'
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuardService implements CanActivate {
 
 
 

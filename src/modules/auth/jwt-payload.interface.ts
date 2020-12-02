@@ -5,5 +5,8 @@ export interface IJwtPayLoad {
     username: string;
     email: string;
     roles: RoleType[];
+    isGoogle:boolean;
+    mobile?:boolean;
     iat?: Date;
+    googleData?:any;
 }
