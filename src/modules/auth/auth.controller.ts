@@ -50,4 +50,11 @@ export class AuthController {
     return `<html><body><script>window.opener.postMessage('${JSON.stringify(data)}', '${process.env.LOGIN_GOOGLE}')</script></body></html>`;
   }
 
+  @Post('/gauth')
+  @UseGuards(AuthGuard("oauth"))
+  async googleAuthPostTest(@Req() req) {
+    const data = await this._authService.googleLogin(req);
+    return data 
+  }
+
 }

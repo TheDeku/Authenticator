@@ -111,8 +111,8 @@ export class AuthService {
 
 
   async googleLogin(req) {
-    console.log(req.user.data._json);
-    let dataUser = req.user.data._json;
+    console.log((req.user.data)?req.user.data._json : req.user.payload);
+    let dataUser = (req.user.data)?req.user.data._json : req.user.payload;
     if (!req.user) {
       return 'No user from google';
     }
@@ -141,7 +141,7 @@ export class AuthService {
         username: user.username,
         isGoogle: true,
         roles: user.roles.map(r => r.nombre as RoleType),
-        googleData: req.user.data._json
+        googleData: (req.user.data)?req.user.data._json : req.user.payload
       };
 
       const token = await this._jwtService.sign(payload);
