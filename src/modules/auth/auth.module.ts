@@ -13,6 +13,8 @@ import { Configuration } from '../../config/config.keys';
 import { global } from '../../shared/global'
 import { GoogleStrategy } from './strategies/google-strategy';
 import * as config from 'config';
+import { OAuth2Service } from './oauth2.services';
+import { HttpStrategy } from './strategies/http.strategy';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import * as config from 'config';
   ],
 
   controllers: [AuthController],
-  providers: [AuthService, ConfigService, JwtStrategy,GoogleStrategy],
+  providers: [AuthService, ConfigService, JwtStrategy,GoogleStrategy,OAuth2Service,HttpStrategy],
   exports: [JwtStrategy, PassportModule,GoogleStrategy],
 })
 export class AuthModule {}
