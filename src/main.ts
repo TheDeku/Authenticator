@@ -19,10 +19,13 @@ async function bootstrap() {
   await app.listen(AppModule.port);
   // registerWithEureka("auth", parseInt(AppModule.port));
 
-  
-  registerWithEureka("auth", parseInt(AppModule.port));
+  if (process.env.NODE_ENV === "production") {
+    registerWithEureka("auth", parseInt(AppModule.port));
+  }
+
 
   logger.verbose(`Version: ${environment.appVersion}`)
+  logger.verbose(`JWT: ${process.env.JWT_SECRET}`)
   logger.verbose(`Description: ${environment.appDescription}`)
   logger.verbose(`Author: ${environment.appAuthor}`)
   logger.verbose(`Application listening on port: ${AppModule.port}`)

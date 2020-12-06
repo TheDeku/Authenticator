@@ -4,7 +4,6 @@ import * as jwt from 'jsonwebtoken';
 import { Configuration } from '../../config/config.keys';
 import { ConfigService } from '../../config/config.service';
 import { AuthRepository } from './auth.repository';
-import { global } from '../../shared/global'
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
@@ -26,7 +25,7 @@ export class AuthGuardService implements CanActivate {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
     const token = auth.split(' ')[1];
-    const key = await global.JWT_SECRET;
+    const key = await process.env.JWT_SECRET;
     try {
       const decoded: any = await jwt.verify(token, key);
       console.log(decoded);

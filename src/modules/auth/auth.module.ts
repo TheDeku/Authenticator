@@ -10,7 +10,6 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '../../config/config.module';
 import { Configuration } from '../../config/config.keys';
-import { global } from '../../shared/global'
 import { GoogleStrategy } from './strategies/google-strategy';
 import * as config from 'config';
 import { OAuth2Service } from './oauth2.services';
