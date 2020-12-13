@@ -180,7 +180,9 @@ export class UserService {
     return message;
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number) {
+    console.log(id);
+    let message;
     const userExist = await this._userRepository.findOne(id, {
       where: { status: status.ACTIVE },
     });
@@ -189,7 +191,14 @@ export class UserService {
       throw new NotFoundException();
     }
 
-    await this._userRepository.update(id, { status: 'INACTIVE' });
+    await this._userRepository.update(id, { status: 'INACTIVE' }).then(resp=>{
+      console.log(resp);
+      if (resp.raw.protocol41) {
+        message = {message:"User has been deleted",status:true}
+      }
+    });
+
+    return message;
   }
 
   async setRoleToUser(userId: number, roleId: number): Promise<boolean> {

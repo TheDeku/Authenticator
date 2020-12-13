@@ -73,6 +73,7 @@ export class UserController {
   @Post('updetail')
   @UsePipes(ValidationPipe)
   async updateUserDet(@Body() userDetail: UserDetailDto, @Res() response) {
+    console.log(userDetail);
     let status = await this._userService.updateDetail(userDetail);
     response.status(status.code).json(status);
   }
