@@ -1,0 +1,30 @@
+
+### PORT SERVICE ###
+PORT=5021
+
+
+### Database ###
+TYPE=mysql
+PORTBD=3306
+HOST=db
+USERNAME=username
+PASSWORD=pass
+DATABASE=name
+
+### Database Schema ###
+### WARNING ONLY FALSE IN PRODUCTION ###
+SYNCHRONIZE=false
+DROPSCHEMA=false
+
+### JWT KEY ###
+JWT_SECRET=oirgdjnc5645ui
+
+### GOOGLE OAuth ###
+GOOGLE_CLIENT_ID=
+GOOGLE_SECRET=
+GOOGLE_CALLBACK=url callback
+LOGIN_GOOGLE=login web
+
+
+M_GOOGLE_CLIENT_ID=
+M_GOOGLE_SECRET=
